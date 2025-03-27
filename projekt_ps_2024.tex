@@ -1,0 +1,179 @@
+
+\documentclass[11pt]{article}
+\def\documentlanguage{slovak}
+\usepackage{framed}
+\usepackage{fancyvrb}
+\usepackage{color}
+\usepackage{listings}
+\usepackage{ifpdf}
+\usepackage{ifxetex}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{hyperref}
+\usepackage[normalem]{ulem}
+\usepackage[most]{tcolorbox}
+\ifpdf %pdftex
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[all,pdf,2cell]{xy}\UseAllTwocells\SilentMatrices
+\usepackage[\documentlanguage]{babel}
+\fi
+\ifxetex %xetex
+\usepackage[all,pdf,2cell]{xy}\UseAllTwocells\SilentMatrices
+\usepackage{polyglossia}
+\begingroup\edef\x{\endgroup\noexpand\setdefaultlanguage{\documentlanguage}}\x%
+\fi
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Príklad}
+\newcommand{\newcategory}[1]{\expandafter\newcommand\csname #1\endcsname{\mathbf{#1}}}
+\input{pygments}
+\begin{document}
+\title{Projekt na získanie zápočtu z predmetu Počítačové siete\\LS 2023/24\\
+(prvá časť)}
+\maketitle
+\section{Získanie zápočtu}
+\subsection{Formálne aspekty}
+
+\begin{tcolorbox}[colback=red!5!white,colframe=red!75!black]
+Vaše repozitáre musia byť súkromné (private), nie verejné (public). Predídeme
+tým nepríjemným nedorozumeniam ohľadom autorstva.
+\end{tcolorbox}
+
+\begin{itemize}
+\item Odovzdávať sa bude prostredníctvom githubu, sprístupnením repozitára
+menom \texttt{yaml\_server} užívateľovi \texttt{gjenca}
+\item Repozitár bude obsahovať iba jeden súbor so zdrojovým kódom, nič iné.
+\item Termín odovzdania projektu je 14.4.2024 23:59:59.
+\item Po tomto termíne budú projekty vyhodnotené do troch dní a študentom budú oznámené prípadné požadované zmeny pre zvýšenie počtu bodov.
+\item V prípade, že niekto bude mať záujem o zvýšenie počtu bodov, bude
+vypísaný ďalší termín dokedy budú môcť záujemcovia odovzdať druhú verziu
+programu.
+\end{itemize}
+
+\subsection{Kritériá hodnotenia}
+\begin{itemize}
+\item Posudzovať sa bude korektnosť implementácie v zmysle špecifikácie protokolu.
+\item Posudzovať sa bude aj zdrojový kód: pokiaľ niekto odovzdá príliš škaredý kód, dostane horšiu známku.
+\item Používajte, (adekvátne účelu) prostriedky Pythonu: funkcie, slovníky, triedy, zabudované dátové typy.
+\end{itemize}
+
+\subsection{Testovač zadania}
+
+Na URL \url{https://github.com/gjenca/test_yaml_server.git} je malý
+testovací systém pre testovanie vášho riešenia. 
+Pokyny pre použitie viď tam. Určite ho použite predtým, ako mi pošlete riešenie.
+
+Ak nájdete nejakú chybu v tých testoch (snažil som sa ich písať robustne, ale je možné,
+že tom v nich spravil ja nejakú chybu), nahláste mi to cez issue tracker na
+URL \url{https://github.com/gjenca/test_yaml_server/issues}, alebo mi pošlite email.
+
+POZOR! Testy sa budú časom meniť
+a pribúdať, tak ako budem Vaše zadania opravovať.
+
+\section{O formáte YAML}
+
+Formát YAML je široko používaný formát pre serializáciu (prevod na text a späť) dát. Používa sa najmä na konfiguráciu. Jeho výhodou je jednoduchá čitateľnosť, možnosť rozumnej ručnej editácie, otvorenosť v smere podpory nových dátových typov. Nevýhodou oproti iným formátom je pomalosť syntaktickej analýzy.
+
+V Python je podporovaný projektom \href{https://pyyaml.org/wiki/PyYAMLDocumentation}{PyYAML}, vo vašej distribúcii takmer určite existuje balíček. Používa sa pomerne priamočiaro.
+
+\begin{framed}
+\include{yamlexample.py}
+\end{framed}
+\newpage
+Serializovať je možné aj zoznamy, čísla atď.
+
+\begin{framed}
+\include{yamlexample2.py}
+\end{framed}
+Poznámka: číslo 4 PyYAML serializuje ako \texttt{'4\textbackslash n...\textbackslash n'}
+
+\section{Zadanie}
+
+Napíšte TCP server, ktorý bude sprístupňovať súbory vo formáte YAML v adresári {\tt data}
+V YAML súboroch sú objekty typu "mapping" (YAML terminológia), v každom objekte je práve jeden takýto objekt. Príklad obsahu takéhoto súboru je tu:
+\begin{framed}
+\include{elephant.yaml}
+\end{framed}
+
+Pomocou funkcie \texttt{yaml.safe\_load} môžete obsah takéhoto súboru prečítať a potom s ním pracovať ako so slovníkom.
+\begin{framed}
+\include{read_elephant.py}
+\end{framed}
+
+\section{Protokol}
+
+\subsection{Základné pravidlá}
+
+\begin{itemize}
+\item Protokol bude pre texty používať kódovanie UTF-8, koniec riadku je {\tt
+<LF>} (ASCII kód 10), ako v Unixe.
+\item Bude postavený nad TCP.
+\item Klient bude serveru posielať \emph{požiadavky} (anglicky \emph{request}) a server po každej požiadavke pošle
+naspäť \emph{odpoveď} (anglicky \emph{response}).
+\item Požiadavka aj odpoveď majú textovú časť (metóda/status, hlavičky) v kódovaní UTF-8, po ktorých môže nasledovať v istých situáciách obsah, obsah je vo formáte YAML.
+\end{itemize}
+\subsection{Požiadavka}
+\begin{itemize}
+\item Požiadavka bude vždy obsahovať v prvom riadku \emph{metódu} (anglicky method), t.j. jedno slovo zo slov \texttt{GET, KEYS, FIELDS}.
+\item Nasledovať bude bližšia špecifikácia požiadavky, pomocou niekoľkých \emph{hlavičiek}
+(headers). Hlavičky nemusia byť uvedené (môže ich byť 0). Každá hlavička je na jednom
+riadku. Hlavička sa skladá z \emph{identifikátora} a \emph{hodnoty}, sú oddelené dvojbodkou.
+Identifikátor musí byť ASCII reťazec bez bielych znakov a nesmie obsahovať znak \texttt{:}
+(dvojbodka).
+\footnote{Viď metódy \texttt{str.isascii} a \texttt{str.isspace} v dokumentácii Pythonu}
+Príklad hlavičky:
+\begin{flushleft}
+\texttt{Key:elephant}
+\end{flushleft}
+\item Po hlavičkách bude nasledovať vždy práve jeden prázdny riadok.
+\item Po prázdnom riadku môže (ale nemusí) nasledovať \emph{obsah požiadavky}. To, či
+požiadavka má obsah a aký je dlhý je dané hodnotou hlavičky \texttt{Content-length}. Dĺžka je v bytoch, nie v znakoch.
+\end{itemize}
+\subsection{Odpoveď}
+\begin{itemize}
+\item Odpoveď bude mať v prvom riadku \emph{stav} (anglicky status).
+\item Stav obsahuje ako prvé slovo trojciferné číslo, nasledované práve jednou medzerou a popisom. Príklad stavu:
+\begin{flushleft}
+\texttt{200 Bad request}
+\end{flushleft}
+\item Nasledujú hlavičky, v rovnakom tvare ako pri požiadavke.
+\item Potom bude vždy práve jeden prázdny riadok.
+\item Nasledovať obsah odpovede (alebo nič), dĺžka vyplýva z metódy a hlavičiek.
+\item Spojenie za normálnych okolností ukončí klient, zavretím socketu.
+\end{itemize}
+\subsection{Metódy}
+Teraz ideme špecifikovať po jednotlivých metódach typy rôznych požiadaviek, možných odpovedí a tomu
+zodpovedajúcich efektov a prípadne obsahov odpovedí.
+Ak nie je v tabuľke v poslednom stĺpci uvedený žiaden obsah odpovede, obsah odpovede
+je vtedy prázdny.
+\include{method_GET}
+\subsubsection{Pomôcky}
+Pre otváranie súboru pre čítanie použite \texttt{with/open} idióm,
+aby ste nemuseli myslieť na to, že ho treba zavrieť.
+\begin{framed}
+\include{withopen.py}
+\end{framed}
+\include{method_KEYS}
+\subsubsection{Pomôcky}
+Zoznam súborov adresári \texttt{data} zistíte pomocou \texttt{os.listdir}, alebo \texttt{glob.glob}.
+\begin{framed}
+\include{listdir.py}
+\end{framed}
+\include{method_FIELDS}
+\subsubsection{Neznáma metóda}
+Ak klient pošle na začiatku požiadavky čokoľvek iné, ako je
+riadok obsahujúci známu metódu, server vráti status \texttt{203 Unknown method} s
+prázdnymi hlavičkami a obsahom \sout{a {\em uzavrie spojenie}}.
+\newpage
+\subsection{Príklad komunikácie klient-server}
+\texttt{C->S} sú označené dáta zasielané klientom serveru, \texttt{S->C} naopak.
+\small
+\include{session.txt}
+\end{document}

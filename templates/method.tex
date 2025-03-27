@@ -1,0 +1,33 @@
+\subsubsection{ {{method}} }
+\noindent\textbf{Hlavičky:}
+%% if headers
+\begin{itemize}
+%% for header in headers
+\item
+\begin{description}
+\item[Názov hlavičky]\texttt{ {{header.name}} }
+\item[Popis hlavičky] {{header.description}} 
+\end{description}
+%% endfor
+\end{itemize}
+%% else
+Žiadne
+
+%% endif
+\noindent\textbf{Správanie sa v rôznych situáciách:}
+\begin{itemize}
+%% for situation in situations
+\item
+\begin{description}
+\item[Situácia]
+{{situation.situation}}
+\item[Odpoveď (status)]
+\texttt{ {{situation.status}} }
+\item[Odpoveď (hlavičky)]
+{{situation.response_headers}}
+\item[Odpoveď (obsah)]
+{{situation.response}}
+\end{description}
+%% endfor
+\end{itemize}
+

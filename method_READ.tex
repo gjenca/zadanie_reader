@@ -1,0 +1,77 @@
+\subsubsection{ READ }
+\noindent\textbf{Hlavičky:}
+\begin{itemize}
+\item
+\begin{description}
+\item[Názov hlavičky]\texttt{ File }
+\item[Popis hlavičky] Názov textového súboru odkiaľ treba prečítať obsah. Nesmie obsahovať znak \texttt{/}. Súbor sa má nachádzať v podadresári \texttt{data}. 
+\end{description}
+\item
+\begin{description}
+\item[Názov hlavičky]\texttt{ From }
+\item[Popis hlavičky] Nezáporné prirodzené číslo. Prvý riadok, ktorý chceme prečítať, číslovanie riadkov začína od 0. 
+\end{description}
+\item
+\begin{description}
+\item[Názov hlavičky]\texttt{ To }
+\item[Popis hlavičky] Nezáporné prirodzené číslo. Riadok po poslednom riadku, ktorý chceme prečítať. \texttt{From} a \texttt{To} majú teda rovnakú sémantiku ako funkcia \texttt{range} v Pythone, alebo vystrihovanie zo zoznamov v Pythone. 
+\end{description}
+\end{itemize}
+\noindent\textbf{Správanie sa v rôznych situáciách:}
+\begin{itemize}
+\item
+\begin{description}
+\item[Situácia]
+V hlavičkách sú neprípustné hodnoty, alebo niektorá hlavička chýba. Toto zahŕňa aj situáciu, keď je hodnota \texttt{From} väčšia ako hodnota \texttt{To}.
+\item[Odpoveď (status)]
+\texttt{ 200 Bad request }
+\item[Odpoveď (hlavičky)]
+Žiadne hlavičky odpovede.
+\item[Odpoveď (obsah)]
+Prázdny obsah odpovede.
+\end{description}
+\item
+\begin{description}
+\item[Situácia]
+Požaduje sa viac riadkov, ako je v súbore.
+\item[Odpoveď (status)]
+\texttt{ 201 Bad line number. }
+\item[Odpoveď (hlavičky)]
+Žiadne hlavičky odpovede.
+\item[Odpoveď (obsah)]
+Prázdny obsah odpovede.
+\end{description}
+\item
+\begin{description}
+\item[Situácia]
+Súbor neexistuje (\texttt{FileNotFoundError}).
+\item[Odpoveď (status)]
+\texttt{ 202 No such file }
+\item[Odpoveď (hlavičky)]
+Žiadne hlavičky odpovede.
+\item[Odpoveď (obsah)]
+Prázdny obsah odpovede.
+\end{description}
+\item
+\begin{description}
+\item[Situácia]
+Súbor sa nedá prečítať z iných dôvodov (\texttt{OSError}).
+\item[Odpoveď (status)]
+\texttt{ 203 Read error }
+\item[Odpoveď (hlavičky)]
+Žiadne hlavičky odpovede.
+\item[Odpoveď (obsah)]
+Prázdny obsah odpovede.
+\end{description}
+\item
+\begin{description}
+\item[Situácia]
+Normálny stav
+\item[Odpoveď (status)]
+\texttt{ 100 OK }
+\item[Odpoveď (hlavičky)]
+\texttt{Lines:} \emph{dĺžka odpovede v riadkoch}
+\item[Odpoveď (obsah)]
+Riadky zo súboru.
+\end{description}
+\end{itemize}

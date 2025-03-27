@@ -1,0 +1,32 @@
+- name: File
+  description: Názov textového súboru odkiaľ treba prečítať obsah. Nesmie obsahovať znak \texttt{/}. Súbor sa má nachádzať v podadresári \texttt{data}.
+- name: From
+  description: Nezáporné prirodzené číslo. Prvý riadok, ktorý chceme prečítať, číslovanie riadkov začína od 0.
+- name: To
+  description: Nezáporné prirodzené číslo. Riadok po poslednom riadku, ktorý chceme prečítať. \texttt{From} a \texttt{To} majú teda rovnakú sémantiku ako funkcia \texttt{range} v Pythone, alebo vystrihovanie zo zoznamov v Pythone.
+---
+- situation: V hlavičkách sú neprípustné hodnoty, alebo niektorá hlavička chýba. Toto zahŕňa aj situáciu, keď je hodnota \texttt{From} väčšia ako hodnota \texttt{To}.
+  status: 200 Bad request
+  response_headers: Žiadne hlavičky odpovede.
+  response: Prázdny obsah odpovede. 
+  effect: Žiaden efekt.
+- situation: Požaduje sa viac riadkov, ako je v súbore.
+  status: 201 Bad line number.
+  effect: Žiaden efekt.
+  response_headers: Žiadne hlavičky odpovede.
+  response: Prázdny obsah odpovede. 
+- situation: Súbor neexistuje (\texttt{FileNotFoundError}).
+  status: 202 No such file
+  effect: Žiaden efekt.
+  response_headers: Žiadne hlavičky odpovede.
+  response: Prázdny obsah odpovede. 
+- situation: Súbor sa nedá prečítať z iných dôvodov (\texttt{OSError}).
+  status: 203 Read error
+  effect: Žiaden efekt.
+  response_headers: Žiadne hlavičky odpovede.
+  response: Prázdny obsah odpovede. 
+- situation: Normálny stav
+  status: 100 OK
+  response: Riadky zo súboru.
+  response_headers: '\texttt{Lines:} \emph{dĺžka odpovede v riadkoch}'
+  effect: Prečíta požadované riadky zo súboru, zapíše do socketu ako odpoveď.

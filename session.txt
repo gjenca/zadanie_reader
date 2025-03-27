@@ -1,0 +1,25 @@
+C->S LS
+C->S 
+S->C 100 OK
+S->C Lines:2
+S->C
+S->C b.txt
+S->C a.txt
+C->S LENGTH
+C->S File:a.txt
+C->S 
+S->C 100 OK
+S->C Lines:1
+S->C 
+S->C 3
+C->S READ
+C->S File:a.txt
+C->S From:0
+C->S To:2
+C->S 
+S->C 100 OK
+S->C Lines:2
+S->C 
+S->C This is line 1 of a.txt
+S->C This is line 2 of a.txt
+C closes connection

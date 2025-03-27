@@ -1,0 +1,23 @@
+- name: File
+  description: Názov textového súboru ktorého počet riadkov chceme zistiť. Nesmie obsahovať znak \texttt{/}. Súbor sa má nachádzať v podadresári \texttt{data}.
+---
+- situation: V hlavičkách sú neprípustné hodnoty, alebo niektorá hlavička chýba.
+  status: 200 Bad request
+  response_headers: Žiadne hlavičky odpovede.
+  response: Prázdny obsah odpovede. 
+  effect: Žiaden efekt.
+- situation: Súbor neexistuje (\texttt{FileNotFoundError}).
+  status: 202 No such file
+  effect: Žiaden efekt.
+  response_headers: Žiadne hlavičky odpovede.
+  response: Prázdny obsah odpovede. 
+- situation: Súbor sa nedá prečítať z iných dôvodov (\texttt{OSError}).
+  status: 203 Read error
+  effect: Žiaden efekt.
+  response_headers: Žiadne hlavičky odpovede.
+  response: Prázdny obsah odpovede. 
+- situation: Normálny stav
+  status: 100 OK
+  response: Jeden riadok, obsahujúci počet riadkov v tom súbore.
+  response_headers: '\texttt{Lines:} 1'
+  effect: Zistí počet riadkov v súbore, zapíše do socketu ako odpoveď v jednom riadku.

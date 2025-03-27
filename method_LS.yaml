@@ -1,0 +1,6 @@
+[]
+---
+- situation: Normálny stav
+  status: 100 OK
+  response_headers: '\texttt{Lines: $n$}, kde $n$ je počet správ/súborov (riadkov odpovede).'
+  response: Názvy všetkých správ/súborov adresári \texttt{data}.
